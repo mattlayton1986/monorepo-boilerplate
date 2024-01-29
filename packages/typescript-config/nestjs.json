@@ -7,10 +7,11 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": false,
     "module": "commonjs",
+    "moduleResolution": "node",
     "noImplicitAny": false,
     "sourceMap": true,
     "strictBindCallApply": false,
     "strictNullChecks": false,
-    "target": "es2017"
+    "target": "es2021"
   }
 }
