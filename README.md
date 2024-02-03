@@ -1,81 +1,47 @@
-# Turborepo starter
+# T-NNPP (Turborepo with NextJS, NestJS, Prisma, PostgreSQL) Boilerplate
 
-This is an official starter Turborepo.
+This project creates a monorepo (using Turborepo) with a NextJS front-end, Nest.js backend, PrismaORM and PostgreSQL database.
 
-## Using this example
+Official documentation sites: 
 
-Run the following command:
+- [NextJS](https://nextjs.org/docs)
+- [Nest.js](https://docs.nestjs.com/)
+- [Prisma](https://www.prisma.io/docs)
+- [Docker](https://docs.docker.com/)
+- [PostgreSQL](https://www.postgresql.org/docs/)
 
-```sh
-npx create-turbo@latest
-```
+## Installing and initializing the app
 
-## What's inside?
+1. Fork the repo then clone it to your local device.
 
-This Turborepo includes the following packages/apps:
+2. Install dependencies: `pnpm install` or `npm install` (pnpm is the recommended package manager for this project)
 
-### Apps and Packages
+3. Update database settings as needed:  
+    a. In `packages/database/docker-compose.yml`, update the environment variables for POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB.  
+    b. In `packages/database/.env` adjust the DATABASE_URL environment variable to match any updates you made in 3a. The database url has the following format: 
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+    ```
+    DATABASE_URL="postgresql:/POSTGRES_USER:POSTGRES_PASSWORD@localhost:5432/POSTGRES_DB"
+    ```  
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+    Alternately, you can configure a different database (SQLite, MySQL, etc.).
 
-### Utilities
+4. Start the Postgres container on Docker: `cd packages/database && docker-compose up -d`  
+  
+    If you prefer not to install and use Docker, you can [configure a local Postgres database](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database).
 
-This Turborepo has some additional tools already setup for you:
+5. *Generate Prisma schema and types and create initial migration: `turbo db:push`
+  
+    **Note:** The Prisma schema is initialized with a basic User model in `packages/database/prisma/schema.prisma`. You may wish to update the models before initializing the database. 
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+    Your terminal may 'hang' when running this command; if this happens, it's waiting for you to enter a name for the migration. 
 
-### Build
+6. *Seed the database: `turbo db:seed`
 
-To build all apps and packages, run the following command:
+    Note: The seed file (`packages/database/src/seed.ts`) seeds the database with two users that follow the default User model. If you changed your model in step 5, you will need to update the seed file to fit your model(s).
 
-```
-cd my-turborepo
-pnpm build
-```
+7. *Run the application: `turbo dev`
+  
+    This will initialize any applications that have a `dev` script in it's `package.json` file. Here it should run `app` (the front-end Next.js app) and `api` (the backend Nest.js app). 
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+\* These commands should be run in the root directory of the monorepo (`/`, the same directory as the `turbo.json` file).
