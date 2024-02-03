@@ -24,6 +24,9 @@
     "format": {
       "dependsOn": []
     },
+    "db:migrate:dev": {
+      "cache": false
+    },
     "db:generate": {
       "cache": false
     },
